@@ -1,0 +1,19 @@
+# Ignore model checkpoints and large files
+saves/
+checkpoint-*/
+*.pt
+*.safetensors
+*.bin
+*.pth
+
+# Ignore python cache
+__pycache__/
+*.pyc
+
+# Ignore system files
+.DS_Store
+.ipynb_checkpoints/
+
+# Ignore virtual environments
+venv/
+.env

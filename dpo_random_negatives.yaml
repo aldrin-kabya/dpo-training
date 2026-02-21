@@ -1,0 +1,39 @@
+### model
+model_name_or_path: meta-llama/Llama-3.2-1B-Instruct
+
+### method
+stage: dpo
+do_train: true
+finetuning_type: full
+pref_beta: 0.05
+pref_loss: sigmoid
+
+### dataset
+dataset: helpsteer2_random  # <--- Points to the new mismatched dataset
+template: llama3
+cutoff_len: 2048
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/llama-3.2-1b/full/dpo_random_neg
+logging_steps: 10
+save_steps: 200
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 128
+learning_rate: 5.0e-7
+num_train_epochs: 2.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.0
+warmup_steps: 20
+bf16: true
+ddp_timeout: 180000000
+
+### optimization
+gradient_checkpointing: true
+flash_attn: auto
+deepspeed: ds_z2_config.json

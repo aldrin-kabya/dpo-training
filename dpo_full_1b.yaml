@@ -1,0 +1,40 @@
+### model
+model_name_or_path: meta-llama/Llama-3.2-1B-Instruct
+
+### method
+stage: dpo
+do_train: true
+finetuning_type: full  # Full Parameter Fine-Tuning (No LoRA)
+pref_beta: 0.05        # Your requested Beta
+pref_loss: sigmoid
+
+### dataset
+dataset: helpsteer2_dpo
+template: llama3
+cutoff_len: 2048
+overwrite_cache: true
+preprocessing_num_workers: 16
+
+### output
+output_dir: saves/llama-3.2-1b/full/dpo
+logging_steps: 10
+save_steps: 200
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 128  # (1 batch * 128 accum = 128 effective batch size)
+learning_rate: 5.0e-7            # Lower LR is usually better for Full FT DPO
+num_train_epochs: 2.0            # Your requested Epochs
+lr_scheduler_type: cosine
+warmup_ratio: 0.0                # DPO usually prefers very little warmup or fixed steps
+warmup_steps: 20                 # Small warmup to stabilize optimization start
+bf16: true                       # Use BFloat16 (native precision)
+ddp_timeout: 180000000
+
+### optimization
+gradient_checkpointing: true     # CRITICAL: Saves VRAM by recomputing activations
+flash_attn: auto                 # <--- Changed from 'fa2' to 'auto'
+deepspeed: ds_z2_config.json
+# optim: paged_adamw_32bit
